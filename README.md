@@ -1,4 +1,4 @@
-# HybridSER: Investigação de Modelos Híbridos para Reconhecimento de Emoções na Fala Multilíngue
+# HybridSER
 
 Este repositório contém o material referente ao Trabalho de Conclusão de Curso (TCC) intitulado:
 
