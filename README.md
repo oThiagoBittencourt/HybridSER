@@ -36,6 +36,25 @@ Este projeto propõe o desenvolvimento de um protótipo de *Speech Emotion Recog
 * **CaFE** (francês canadense)
 * **RAVDESS** (inglês norte-americano)
 
+## 📁 Estrutura do Projeto
+
+```text
+HybridSER/
+├── src/                → Código-fonte principal
+│   ├── data/           → Carregamento de datasets
+│   ├── features/       → Extração de atributos de áudio
+│   ├── models/         → Modelos híbridos (CNN + RNN/LSTM/GRU)
+│   └── utils/          → Funções auxiliares
+├── tests/              → Testes automatizados (pytest)
+├── .github/workflows/  → Pipeline CI com flake8 + pytest
+├── .vscode/            → Configurações automáticas do VSCode
+├── requirements.txt    → Dependências do projeto
+├── .flake8             → Regras do linter
+├── .gitignore          → Arquivos e pastas ignorados
+├── README.md           → Visão geral do projeto
+├── SETUP.md            → Este guia de instalação
+```
+
 ## 👨‍🎓 Autores
 
 * Gabriel Martins Delfes
