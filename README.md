@@ -52,7 +52,7 @@ HybridSER/
 ├── .flake8             → Regras do linter
 ├── .gitignore          → Arquivos e pastas ignorados
 ├── README.md           → Visão geral do projeto
-├── SETUP.md            → Este guia de instalação
+├── SETUP.md            → Guia de instalação
 ```
 
 ## 👨‍🎓 Autores
