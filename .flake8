@@ -1,0 +1,27 @@
+[flake8]
+# Maximum number of characters per line (PEP8 default is 79, but 88 is more modern)
+max-line-length = 88
+
+# Ignore folders that don't need to be analyzed
+exclude = 
+    .venv,
+    __pycache__,
+    .git,
+    .github,
+    build,
+    dist
+
+# Show error count
+count = true
+
+# Specific serious syntax errors and undefined names
+select = E9,F63,F7,F82
+
+# Tolerate other warnings, but still display them (without failing CI/CD)
+exit-zero = true
+
+# Maximum cyclomatic complexity level (10 is acceptable, lower is better)
+max-complexity = 10
+
+# Human-readable output format
+statistics = true
