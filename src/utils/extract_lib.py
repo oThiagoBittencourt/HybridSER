@@ -4,9 +4,8 @@ import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
-import os
-from pathlib import Path
-import shutil
+import sys
+from utils import load_config
 
 def extract_features(audio_path, output_dir):
     """
@@ -222,8 +221,14 @@ def rename_feature_directories(root_dir):
 
 # --- Main Execution ---
 if __name__ == '__main__':
+    print("Testing packages and scripts")
+
+    config = load_config()
+
+    print(config["DATASET_FOLDER"])
+    print(config["OUTPUT_FOLDER_RAW_FEATURES"])
     #SOURCE_AUDIO_DIRECTORY = 'C:/Users/thiago/OneDrive/Desktop/TCC/Code/datasets'
-    #OUTPUT_FEATURES_DIRECTORY = 'C:/Users/thiago/OneDrive/Desktop/TCC/Code/extracted_features_raw'
+    #OUTPUT_FEATURES_DIRECTORY = 'C:/Users/thiago/OneDrive/Desktop/TCC/Code/data'
 
     # Run the processing pipeline
     #process_dataset(SOURCE_AUDIO_DIRECTORY, OUTPUT_FEATURES_DIRECTORY)
@@ -231,5 +236,6 @@ if __name__ == '__main__':
     #print("\n--- Feature extraction complete! ---")
     #print(f"All features saved in: {OUTPUT_FEATURES_DIRECTORY}")
 
-    root_dir = Path("C:/Users/thiago/OneDrive/Desktop/TCC/Code/extracted_features_raw")
-    rename_feature_directories(root_dir)
+    #root_dir = Path("C:/Users/thiago/OneDrive/Desktop/TCC/Code/data")
+    #rename_feature_directories(root_dir)
+    

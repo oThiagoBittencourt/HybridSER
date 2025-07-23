@@ -5,6 +5,12 @@ __pycache__/
 
 # Dataset reasons
 .wav
+.arrf
+.pdf
+src/data/
+data
+datasets
+*.zip
 
 # C extensions
 *.so
@@ -57,6 +63,9 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+
+# Privacy folder
+config.json
 
 # Translations
 *.mo
@@ -142,7 +151,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .envrc
 .venv
 env/
