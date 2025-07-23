@@ -3,8 +3,21 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# Dataset reasons
+.wav
+.arrf
+.pdf
+src/data/
+data
+datasets
+*.zip
+
 # C extensions
 *.so
+
+# Extraction files
+.npy
+.png
 
 # Distribution / packaging
 .Python
@@ -50,6 +63,9 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+
+# Privacy folder
+config.json
 
 # Translations
 *.mo
@@ -135,7 +151,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .envrc
 .venv
 env/
