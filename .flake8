@@ -1,27 +1,42 @@
 [flake8]
-# Maximum number of characters per line (PEP8 default is 79, but 88 is more modern)
-max-line-length = 88
+# Maximum number of characters per line
+max-line-length = 127
 
-# Ignore folders that don't need to be analyzed
-exclude = 
-    .venv,
-    __pycache__,
+# Exclude folders that should not be analyzed
+exclude =
     .git,
+    .venv,
+    .vscode,
     .github,
     build,
-    dist
+    dist,
+    __pycache__,
+    tests/__pycache__
 
-# Show error count
+# Show total number of errors
 count = true
 
-# Specific serious syntax errors and undefined names
-select = E9,F63,F7,F82
+# Ignore minor style issues (conflicts with Black)
+# Whitespace before ':' (conflicts with Black)
+# Line break before binary operator (Black preference)
+ignore =
+    E203,
+    W503,
 
-# Tolerate other warnings, but still display them (without failing CI/CD)
-exit-zero = true
+# Only select critical errors and warnings
+select = E,F,W,C90
 
-# Maximum cyclomatic complexity level (10 is acceptable, lower is better)
-max-complexity = 10
+# Only check .py files
+filename = *.py
 
-# Human-readable output format
-statistics = true
+# Maximum allowed cyclomatic complexity per function
+max-complexity = 15
+
+# Show error code with the message
+show-source = true
+
+# Additional compatibility exclusions
+extend-exclude = 
+    .ipynb_checkpoints,
+    env,
+    notebooks
