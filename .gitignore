@@ -7,8 +7,7 @@ __pycache__/
 .wav
 .arrf
 .pdf
-src/data/
-data
+features
 datasets
 *.zip
 
