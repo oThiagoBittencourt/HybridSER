@@ -4,8 +4,9 @@ import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
-import sys
+
 from utils import load_config
+
 
 def extract_features(audio_path, output_dir):
     """
@@ -30,33 +31,36 @@ def extract_features(audio_path, output_dir):
         delta2_mfccs = librosa.feature.delta(data=mfccs, order=2)
 
         plt.figure(figsize=(12, 8))
-        librosa.display.specshow(delta2_mfccs, sr=sr, x_axis='time')
-        plt.colorbar(format='%+2.0f dB')
-        plt.title(f'Delta-Delta MFCCs\n({file_stem})')
+        librosa.display.specshow(delta2_mfccs, sr=sr, x_axis="time")
+        plt.colorbar(format="%+2.0f dB")
+        plt.title(f"Delta-Delta MFCCs\n({file_stem})")
         plt.tight_layout()
-        plt.savefig(target_dir / 'dd_mfcc.png')
+        plt.savefig(target_dir / "dd_mfcc.png")
         plt.close()
 
         chromagram = librosa.feature.chroma_stft(y=signal, sr=sr)
 
         plt.figure(figsize=(12, 8))
-        librosa.display.specshow(chromagram, sr=sr, x_axis='time', y_axis='chroma')
-        plt.colorbar(label='Intensity')
-        plt.title(f'Chromagram\n({file_stem})')
+        librosa.display.specshow(chromagram, sr=sr, x_axis="time", y_axis="chroma")
+        plt.colorbar(label="Intensity")
+        plt.title(f"Chromagram\n({file_stem})")
         plt.tight_layout()
-        plt.savefig(target_dir / 'chromagram.png')
+        plt.savefig(target_dir / "chromagram.png")
         plt.close()
 
         zcr = librosa.feature.zero_crossing_rate(y=signal)[0]
-        np.save(target_dir / 'zcr.npy', zcr)
+        np.save(target_dir / "zcr.npy", zcr)
 
         rms = librosa.feature.rms(y=signal)[0]
-        np.save(target_dir / 'rms.npy', rms)
+        np.save(target_dir / "rms.npy", rms)
 
     except Exception as e:
         print(f"Error processing {audio_path}: {e}")
 
-def process_dataset(source_root, output_root, audio_extensions=('.wav', '.mp3', '.flac')):
+
+def process_dataset(
+    source_root, output_root, audio_extensions=(".wav", ".mp3", ".flac")
+):
     """
     Recursively finds all audio files in the source_root, extracts their
     features, and saves them to the output_root.
@@ -69,24 +73,25 @@ def process_dataset(source_root, output_root, audio_extensions=('.wav', '.mp3', 
                 audio_path = os.path.join(root, file)
                 extract_features(audio_path, output_root)
 
+
 def parse_french_name(name):
     """Attempts to parse a French filename pattern. Returns new name or None."""
     FRENCH_EMOTIONS = {
-        'C': 'Anger',
-        'D': 'Disgust',
-        'J': 'Joy',
-        'N': 'Neutral',
-        'P': 'Fear',
-        'S': 'Surprise',
-        'T': 'Sadness'
+        "C": "Anger",
+        "D": "Disgust",
+        "J": "Joy",
+        "N": "Neutral",
+        "P": "Fear",
+        "S": "Surprise",
+        "T": "Sadness",
     }
     try:
-        parts = name.split('-')
+        parts = name.split("-")
         if len(parts) < 2:
             return None
 
         speaker_id = int(parts[0])
-        gender = 'M' if speaker_id % 2 != 0 else 'F'
+        gender = "M" if speaker_id % 2 != 0 else "F"
 
         emotion_code = parts[1].upper()
         if emotion_code not in FRENCH_EMOTIONS:
@@ -98,22 +103,21 @@ def parse_french_name(name):
         return None
 
 
-
 def parse_english_name(name):
     """Attempts to parse an English filename pattern. Returns new name or None."""
 
     ENGLISH_EMOTIONS = {
-        '01': 'Neutral',
-        '02': 'Calm',
-        '03': 'Happy',
-        '04': 'Sad',
-        '05': 'Angry',
-        '06': 'Fearful',
-        '07': 'Disgust',
-        '08': 'Surprised'
+        "01": "Neutral",
+        "02": "Calm",
+        "03": "Happy",
+        "04": "Sad",
+        "05": "Angry",
+        "06": "Fearful",
+        "07": "Disgust",
+        "08": "Surprised",
     }
     try:
-        parts = name.split('-')
+        parts = name.split("-")
         if len(parts) != 7:
             return None
 
@@ -123,29 +127,30 @@ def parse_english_name(name):
         emotion = ENGLISH_EMOTIONS[emotion_code]
 
         actor_id = int(parts[6])
-        gender = 'M' if actor_id % 2 != 0 else 'F'
+        gender = "M" if actor_id % 2 != 0 else "F"
 
-        if emotion == 'Fearful':
-            emotion = 'Fear'
+        if emotion == "Fearful":
+            emotion = "Fear"
 
         return f"eng_{gender}_{emotion}"
     except (ValueError, IndexError):
         return None
 
+
 def parse_portuguese_name(name):
     """Attempts to parse a Portuguese filename pattern. Returns new name or None."""
 
     PORTUGUESE_EMOTIONS = {
-        'ale': 'Joy',
-        'des': 'Disgust',
-        'tri': 'Sadness',
-        'sur': 'Surprise',
-        'rai': 'Anger',
-        'neu': 'Neutral',
-        'med': 'Fear'
+        "ale": "Joy",
+        "des": "Disgust",
+        "tri": "Sadness",
+        "sur": "Surprise",
+        "rai": "Anger",
+        "neu": "Neutral",
+        "med": "Fear",
     }
     try:
-        parts = name.split('-')
+        parts = name.split("-")
         if len(parts) < 2:
             return None
 
@@ -155,10 +160,10 @@ def parse_portuguese_name(name):
         emotion = PORTUGUESE_EMOTIONS[emotion_code]
 
         gender_code = parts[1][0].lower()
-        if gender_code == 'f':
-            gender = 'F'
-        elif gender_code == 'm':
-            gender = 'M'
+        if gender_code == "f":
+            gender = "F"
+        elif gender_code == "m":
+            gender = "M"
         else:
             return None
 
@@ -166,7 +171,9 @@ def parse_portuguese_name(name):
     except IndexError:
         return None
 
+
 # --- Main Processing Function ---
+
 
 def rename_feature_directories(root_dir):
     """
@@ -219,23 +226,23 @@ def rename_feature_directories(root_dir):
         for name in unparsed_dirs:
             print(f"- {name}")
 
+
 # --- Main Execution ---
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Testing packages and scripts")
 
     config = load_config()
 
     print(config["DATASET_FOLDER"])
     print(config["OUTPUT_FOLDER_RAW_FEATURES"])
-    #SOURCE_AUDIO_DIRECTORY = 'C:/Users/thiago/OneDrive/Desktop/TCC/Code/datasets'
-    #OUTPUT_FEATURES_DIRECTORY = 'C:/Users/thiago/OneDrive/Desktop/TCC/Code/data'
+    # SOURCE_AUDIO_DIRECTORY = 'C:/Users/thiago/OneDrive/Desktop/TCC/Code/datasets'
+    # OUTPUT_FEATURES_DIRECTORY = 'C:/Users/thiago/OneDrive/Desktop/TCC/Code/data'
 
     # Run the processing pipeline
-    #process_dataset(SOURCE_AUDIO_DIRECTORY, OUTPUT_FEATURES_DIRECTORY)
+    # process_dataset(SOURCE_AUDIO_DIRECTORY, OUTPUT_FEATURES_DIRECTORY)
 
-    #print("\n--- Feature extraction complete! ---")
-    #print(f"All features saved in: {OUTPUT_FEATURES_DIRECTORY}")
+    # print("\n--- Feature extraction complete! ---")
+    # print(f"All features saved in: {OUTPUT_FEATURES_DIRECTORY}")
 
-    #root_dir = Path("C:/Users/thiago/OneDrive/Desktop/TCC/Code/data")
-    #rename_feature_directories(root_dir)
-    
+    # root_dir = Path("C:/Users/thiago/OneDrive/Desktop/TCC/Code/data")
+    # rename_feature_directories(root_dir)
