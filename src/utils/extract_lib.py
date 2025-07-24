@@ -4,8 +4,38 @@ import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
-
 from utils import load_config
+
+
+# --- New Helper Function to Save Spectrogram Kernel ---
+def save_spec_as_image(spec_data, file_path, sr, y_axis=None):
+    """
+    Generates and saves a spectrogram image without axes, borders, or colorbars.
+    This function saves only the core content of the plot.
+
+    Args:
+        spec_data (np.ndarray): The spectrogram data from librosa.
+        file_path (Path or str): The full path to save the image file.
+        sr (int): The sampling rate of the audio.
+        y_axis (str, optional): The y-axis type for specshow, e.g., 'chroma'.
+                                Defaults to None.
+    """
+    # Create a figure and an axes object. The axes will cover the entire figure.
+    fig = plt.figure(figsize=(4, 4), dpi=100)  # DPI can be adjusted for resolution
+    ax = plt.Axes(fig, [0.0, 0.0, 1.0, 1.0])
+    ax.set_axis_off()  # Turn off the axes (ticks, labels, spines)
+    fig.add_axes(ax)
+
+    # Plot the spectrogram using librosa.display.specshow on the custom axes
+    librosa.display.specshow(spec_data, sr=sr, ax=ax, y_axis=y_axis)
+
+    # Save the figure.
+    # - bbox_inches='tight' crops the figure to the plotted data.
+    # - pad_inches=0 removes any padding around the cropped area.
+    plt.savefig(file_path, bbox_inches="tight", pad_inches=0)
+
+    # Close the figure to free up memory
+    plt.close(fig)
 
 
 def extract_features(audio_path, output_dir):
@@ -29,25 +59,18 @@ def extract_features(audio_path, output_dir):
 
         mfccs = librosa.feature.mfcc(y=signal, n_mfcc=13, sr=sr)
         delta2_mfccs = librosa.feature.delta(data=mfccs, order=2)
+        # Save the kernel of the spectrogram using the new helper function
+        save_spec_as_image(delta2_mfccs, target_dir / "dd_mfcc.png", sr)
 
-        plt.figure(figsize=(12, 8))
-        librosa.display.specshow(delta2_mfccs, sr=sr, x_axis="time")
-        plt.colorbar(format="%+2.0f dB")
-        plt.title(f"Delta-Delta MFCCs\n({file_stem})")
-        plt.tight_layout()
-        plt.savefig(target_dir / "dd_mfcc.png")
-        plt.close()
-
+        # --- 2. Chromagram (Image) ---
+        # Calculate features
         chromagram = librosa.feature.chroma_stft(y=signal, sr=sr)
+        # Save the kernel, specifying the y_axis type for chromagrams
+        save_spec_as_image(
+            chromagram, target_dir / "chromagram.png", sr, y_axis="chroma"
+        )
 
-        plt.figure(figsize=(12, 8))
-        librosa.display.specshow(chromagram, sr=sr, x_axis="time", y_axis="chroma")
-        plt.colorbar(label="Intensity")
-        plt.title(f"Chromagram\n({file_stem})")
-        plt.tight_layout()
-        plt.savefig(target_dir / "chromagram.png")
-        plt.close()
-
+        # --- 3. Zero-Crossing Rate (Array) ---
         zcr = librosa.feature.zero_crossing_rate(y=signal)[0]
         np.save(target_dir / "zcr.npy", zcr)
 
@@ -74,6 +97,7 @@ def process_dataset(
                 extract_features(audio_path, output_root)
 
 
+# --- Parsing Functions (Unchanged) ---
 def parse_french_name(name):
     """Attempts to parse a French filename pattern. Returns new name or None."""
     FRENCH_EMOTIONS = {
@@ -89,10 +113,8 @@ def parse_french_name(name):
         parts = name.split("-")
         if len(parts) < 2:
             return None
-
         speaker_id = int(parts[0])
         gender = "M" if speaker_id % 2 != 0 else "F"
-
         emotion_code = parts[1].upper()
         if emotion_code not in FRENCH_EMOTIONS:
             return None
@@ -120,7 +142,6 @@ def parse_english_name(name):
         parts = name.split("-")
         if len(parts) != 7:
             return None
-
         emotion_code = parts[2]
         if emotion_code not in ENGLISH_EMOTIONS:
             return None
@@ -128,10 +149,8 @@ def parse_english_name(name):
 
         actor_id = int(parts[6])
         gender = "M" if actor_id % 2 != 0 else "F"
-
         if emotion == "Fearful":
             emotion = "Fear"
-
         return f"eng_{gender}_{emotion}"
     except (ValueError, IndexError):
         return None
@@ -153,7 +172,6 @@ def parse_portuguese_name(name):
         parts = name.split("-")
         if len(parts) < 2:
             return None
-
         emotion_code = parts[0].lower()
         if emotion_code not in PORTUGUESE_EMOTIONS:
             return None
@@ -166,13 +184,9 @@ def parse_portuguese_name(name):
             gender = "M"
         else:
             return None
-
         return f"por_{gender}_{emotion}"
     except IndexError:
         return None
-
-
-# --- Main Processing Function ---
 
 
 def rename_feature_directories(root_dir):
@@ -229,20 +243,17 @@ def rename_feature_directories(root_dir):
 
 # --- Main Execution ---
 if __name__ == "__main__":
-    print("Testing packages and scripts")
 
     config = load_config()
+    SOURCE_AUDIO_DIRECTORY = config["DATASET_FOLDER"]
+    OUTPUT_FEATURES_DIRECTORY = config["OUTPUT_FOLDER_RAW_FEATURES"]
 
-    print(config["DATASET_FOLDER"])
-    print(config["OUTPUT_FOLDER_RAW_FEATURES"])
-    # SOURCE_AUDIO_DIRECTORY = 'C:/Users/thiago/OneDrive/Desktop/TCC/Code/datasets'
-    # OUTPUT_FEATURES_DIRECTORY = 'C:/Users/thiago/OneDrive/Desktop/TCC/Code/data'
+    # --- To run the full pipeline ---
+    # 1. Extract features
+    print("--- Starting Feature Extraction ---")
+    process_dataset(SOURCE_AUDIO_DIRECTORY, OUTPUT_FEATURES_DIRECTORY)
+    print("\n--- Feature extraction complete! ---")
 
-    # Run the processing pipeline
-    # process_dataset(SOURCE_AUDIO_DIRECTORY, OUTPUT_FEATURES_DIRECTORY)
-
-    # print("\n--- Feature extraction complete! ---")
-    # print(f"All features saved in: {OUTPUT_FEATURES_DIRECTORY}")
-
-    # root_dir = Path("C:/Users/thiago/OneDrive/Desktop/TCC/Code/data")
-    # rename_feature_directories(root_dir)
+    # 2. Rename directories
+    print("\n--- Starting Directory Renaming ---")
+    rename_feature_directories(OUTPUT_FEATURES_DIRECTORY)
