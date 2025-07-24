@@ -1,7 +1,3 @@
-# This workflow installs Python dependencies and is set up for future testing and linting
-# Python version: 3.11
-# flake8 and pytest steps are currently commented out for early-stage development
-
 name: Python application
 
 on:
@@ -37,5 +33,4 @@ jobs:
 
     - name: Test with pytest
       run: |
-        # Run unit tests with pytest
         pytest
