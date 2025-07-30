@@ -1,6 +1,7 @@
 import numpy as np
 from src.utils.augment import add_awgn, pitch_shift, time_stretch
 
+
 def generate_dummy_audio(duration_sec=1, sr=16000):
     return np.ones(sr * duration_sec), sr
 

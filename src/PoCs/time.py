@@ -4,7 +4,7 @@ from utils.augment import time_stretch, tranform_estereo_to_mono
 import os
 
 OUTPUT_DIR = "audios/outputs"
-os.makedirs(OUTPUT_DIR, exist_ok=True) 
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 y, sr = librosa.load("audios/03-01-02-01-01-02-01.wav", sr=None)
 y = tranform_estereo_to_mono(y)

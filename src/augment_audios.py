@@ -25,6 +25,7 @@ COMBINATIONS = [
     # "awgn_time_pitch",
 ]
 
+
 def apply_augmentations(y, sr, steps):
     for step in steps:
         if step == "pitch":
@@ -37,6 +38,7 @@ def apply_augmentations(y, sr, steps):
         if len(y) < 2048:
             raise ValueError(f"A transformação '{step}' resultou em áudio muito curto (len={len(y)}). Abortando.")
     return y
+
 
 def process_file(filepath, combinations):
     try:
@@ -63,12 +65,14 @@ def process_file(filepath, combinations):
     except Exception as e:
         print(f"Erro ao processar {filepath.name}: {e}")
 
+
 def augment_all():
     files = list(RAW_DIR.glob("*.wav"))
     print(f"files: {files}")
     for file in files:
         process_file(file, COMBINATIONS)
         print("Todas as combinações foram aplicadas para todos os arquivos.")
+
 
 def augment_single(filename):
     file = RAW_DIR / filename
@@ -77,6 +81,7 @@ def augment_single(filename):
         return
     process_file(file, COMBINATIONS)
     print(f"\nCombinações aplicadas para {filename}.")
+
 
 if __name__ == "__main__":
     augment_single(FILENAME)
