@@ -22,4 +22,3 @@ def test_time_stretch():
     y, _ = generate_dummy_audio()
     y_stretched = time_stretch(y, rate=0.9)
     assert y_stretched.shape[0] != y.shape[0]
-
