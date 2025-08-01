@@ -41,7 +41,7 @@ Este projeto propõe o desenvolvimento de um protótipo de _Speech Emotion Recog
 HybridSER/
 ├── src/                → Código-fonte principal
 │   ├── data/           → Carregamento de datasets
-│   ├── features/       → Extração de atributos de áudio
+│   ├── features/       → Diretório para funcionalidades
 │   ├── models/         → Modelos híbridos (CNN + RNN/LSTM/GRU)
 │   └── utils/          → Funções auxiliares
 ├── tests/              → Testes automatizados (pytest)
