@@ -16,7 +16,9 @@ datasets
 
 # Extraction files
 .npy
-.png
+*.png
+*.keras
+.gitattributes
 
 # Distribution / packaging
 .Python

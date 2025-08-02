@@ -1,8 +1,8 @@
 import os
-import librosa
-import librosa.display
-import matplotlib.pyplot as plt
-import numpy as np
+import librosa  # type: ignore
+import librosa.display  # type: ignore
+import matplotlib.pyplot as plt  # type: ignore
+import numpy as np  # type: ignore
 from pathlib import Path
 from utils import load_config
 
@@ -129,29 +129,31 @@ def parse_english_name(name):
     """Attempts to parse an English filename pattern. Returns new name or None."""
 
     ENGLISH_EMOTIONS = {
-        "01": "Neutral",
-        "02": "Calm",
-        "03": "Happy",
-        "04": "Sad",
-        "05": "Angry",
-        "06": "Fearful",
-        "07": "Disgust",
-        "08": "Surprised",
+        "01": "Neutral", "02": "Calm", "03": "Joy", "04": "Sad",
+        "05": "Angry", "06": "Fearful", "07": "Disgust", "08": "Surprised",
     }
     try:
-        parts = name.split("-")
+        # FIX: Isolate the numeric identifier before processing
+        identifier = name.split('_')[0]
+
+        parts = identifier.split("-")
         if len(parts) != 7:
             return None
+
         emotion_code = parts[2]
         if emotion_code not in ENGLISH_EMOTIONS:
             return None
         emotion = ENGLISH_EMOTIONS[emotion_code]
 
+        # This will now work on a clean number string like '01', '02', etc.
         actor_id = int(parts[6])
         gender = "M" if actor_id % 2 != 0 else "F"
+
         if emotion == "Fearful":
             emotion = "Fear"
+
         return f"eng_{gender}_{emotion}"
+
     except (ValueError, IndexError):
         return None
 
@@ -250,9 +252,9 @@ if __name__ == "__main__":
 
     # --- To run the full pipeline ---
     # 1. Extract features
-    print("--- Starting Feature Extraction ---")
-    process_dataset(SOURCE_AUDIO_DIRECTORY, OUTPUT_FEATURES_DIRECTORY)
-    print("\n--- Feature extraction complete! ---")
+    # print("--- Starting Feature Extraction ---")
+    # process_dataset(SOURCE_AUDIO_DIRECTORY, OUTPUT_FEATURES_DIRECTORY)
+    # print("\n--- Feature extraction complete! ---")
 
     # 2. Rename directories
     print("\n--- Starting Directory Renaming ---")
