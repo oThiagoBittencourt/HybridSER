@@ -68,8 +68,9 @@ cover/
 # Privacy folder
 config.json
 
-# Poject folderss
+# Poject folders
 src/data/dataset/
+src/data/
 
 # Translations
 *.mo
