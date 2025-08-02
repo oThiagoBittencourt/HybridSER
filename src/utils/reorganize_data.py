@@ -12,8 +12,7 @@ import shutil
 from pathlib import Path
 
 
-NEW_PATH = "src//data"
-BASE_DIR = "src//data//dataset"
+NEW_PATH = "src//data//dataset"
 
 
 def rename_and_relocate_data(audio_path, language, gender, emotion, id):
@@ -53,13 +52,14 @@ def select_portuguese_labels():
     counters = {}  # Emotion accountant
 
     # Recursively loops through all .wav files within base_path
-    for wav in Path("src//data//dataset//VERBO-Dataset").rglob("*.wav"):
+    for wav in Path("src//data//dataset_base//VERBO-Dataset//Audios//").rglob("*.wav"):
         # Separate the file name by "-"
         parts = wav.stem.split("-")
-        if len(parts) != 3:  # If it doesn't have the expected format, skip
+        if len(parts) < 2:  # If it doesn't have the expected format, skip
             continue
 
-        emo_code, actor_code, _ = parts
+        emo_code = parts[0]
+        actor_code = parts[1]
 
         # Select gender
         gender = "F" if actor_code.lower().startswith("f") else "M"
@@ -90,7 +90,7 @@ def select_french_labels():
     counters = {}  # Emotion accountant
 
     # Recursively loops through all .wav files within base_path
-    for wav in Path("src//data//dataset//CaFE//").rglob("*.wav"):
+    for wav in Path("src//data//dataset_base//CaFE//").rglob("*.wav"):
         # Separate the file name by "-"
         parts = wav.stem.split("-")
         if len(parts) < 3:  # If it doesn't have the expected format, skip
@@ -114,7 +114,7 @@ def select_french_labels():
             counters[emotion] = 0
 
         # Move and rename the audio
-        rename_and_relocate_data(str(wav), "por", gender, emotion, counters[emotion])
+        rename_and_relocate_data(str(wav), "fra", gender, emotion, counters[emotion])
 
         counters[emotion] += 1
 
@@ -135,7 +135,7 @@ def select_english_labels():
     counters = {}  # Emotion accountant
 
     # Recursively loops through all .wav files within base_path
-    for wav in Path("src//data//dataset//REVDESS//Speech//").rglob("*.wav"):
+    for wav in Path("src//data//dataset_base//REVDESS//Speech//").rglob("*.wav"):
         # Separate the file name by "-"
         parts = wav.stem.split("-")
         if len(parts) != 7:  # If it doesn't have the expected format, skip
@@ -157,7 +157,7 @@ def select_english_labels():
             counters[emotion] = 0
 
         # Move and rename the audio
-        rename_and_relocate_data(str(wav), "por", gender, emotion, counters[emotion])
+        rename_and_relocate_data(str(wav), "eng", gender, emotion, counters[emotion])
         counters[emotion] += 1
 
 
