@@ -3,10 +3,10 @@ import librosa
 from utils.augment import pitch_shift
 import os
 
-OUTPUT_DIR = "audios/outputs"
+OUTPUT_DIR = "audios/PoCs_Outputs"
 os.makedirs(OUTPUT_DIR, exist_ok=True) 
 
-y, sr = librosa.load("audios/03-01-02-01-01-02-01.wav", sr=None)
+y, sr = librosa.load("audios/raw/01-C-1-1.wav", sr=None)
 print(f"Original: {y.shape}, SR = {sr}")
 
 y_pitch = pitch_shift(y, sr, steps=2)
