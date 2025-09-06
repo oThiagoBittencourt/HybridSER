@@ -9,10 +9,10 @@ from utils.audio_metadado import get_audio_metadado
 SNR_LOW = [23, 30]
 SNR_HIGH = [16, 23]
 
-RATE_LOW = [[1, 1.04], [0.96, 1]]  # RATE [[acelerar], [desacelerar]]
+RATE_LOW = [[1, 1.04], [0.96, 1]]  # RATE [[speed up], [slow down]]
 RATE_HIGH = [[1.04, 1.1], [0.9, 0.96]]
 
-N_STEPS_FEMALE = [[2, 3], [1, 2]]  # N_STEPS [[alto], [baixo]]
+N_STEPS_FEMALE = [[2, 3], [1, 2]]  # N_STEPS [[high], [low]]
 N_STEPS_MALE = [[-3, -2], [-2, -1]]
 
 COMBINATIONS = [
